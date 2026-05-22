@@ -1,0 +1,64 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Remote config delivered to the app at launch. One row per platform
+// scope ("all" is the fallback; "ios"/"android" override it).
+model RemoteConfig {
+  id        String   @id @default(cuid())
+  platform  String   @unique // "all" | "ios" | "android"
+  data      Json
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Version gate per platform.
+model AppVersion {
+  id           String   @id @default(cuid())
+  platform     String   @unique // "ios" | "android"
+  minSupported String // below this -> updateRequired
+  latest       String // newest published version
+  storeUrl     String
+  message      String?
+  updatedAt    DateTime @updatedAt
+}
+
+// In-app announcements / banners / maintenance notices.
+model Announcement {
+  id         String    @id @default(cuid())
+  title      String
+  body       String
+  level      String    @default("info") // info | warning | critical
+  platform   String    @default("all") // all | ios | android
+  minVersion String?
+  maxVersion String?
+  startsAt   DateTime?
+  endsAt     DateTime?
+  active     Boolean   @default(true)
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  @@index([active])
+}
+
+// Server-side event log (also forwarded to the Facebook Conversions API
+// when a CAPI token is configured).
+model Event {
+  id          String   @id @default(cuid())
+  name        String
+  platform    String?
+  appVersion  String?
+  deviceId    String?
+  params      Json?
+  fbForwarded Boolean  @default(false)
+  createdAt   DateTime @default(now())
+
+  @@index([name])
+  @@index([createdAt])
+}
