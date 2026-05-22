@@ -2,6 +2,7 @@ import { FastifyInstance } from 'fastify';
 import { z } from 'zod';
 import { prisma } from '../db';
 import { requireAdmin } from '../auth';
+import { sendExpoPush } from '../services/push';
 
 const platformScope = z.enum(['all', 'ios', 'android']);
 const platformOnly = z.enum(['ios', 'android']);
@@ -152,5 +153,36 @@ export async function adminRoutes(app: FastifyInstance) {
     return {
       stats: grouped.map((g) => ({ name: g.name, count: g._count._all })),
     };
+  });
+
+  // ----- Push notifications -----
+  app.get('/api/v1/admin/devices', async () => {
+    const total = await prisma.device.count();
+    const byPlatform = await prisma.device.groupBy({ by: ['platform'], _count: { _all: true } });
+    return { total, byPlatform: byPlatform.map((b) => ({ platform: b.platform, count: b._count._all })) };
+  });
+
+  app.post('/api/v1/admin/push', async (req, reply) => {
+    const parsed = z
+      .object({
+        title: z.string().min(1).max(120),
+        body: z.string().min(1).max(500),
+        platform: z.enum(['all', 'ios', 'android']).default('all'),
+        data: z.record(z.unknown()).optional(),
+      })
+      .safeParse(req.body);
+    if (!parsed.success) {
+      return reply.code(400).send({ error: 'invalid_body', details: parsed.error.flatten() });
+    }
+    const { title, body, platform, data } = parsed.data;
+    const devices = await prisma.device.findMany({
+      where: platform === 'all' ? undefined : { platform },
+      select: { token: true },
+    });
+    const result = await sendExpoPush(
+      devices.map((d) => d.token),
+      { title, body, data }
+    );
+    return { ...result };
   });
 }

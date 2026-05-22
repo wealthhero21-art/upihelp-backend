@@ -47,6 +47,18 @@ model Announcement {
   @@index([active])
 }
 
+// Registered devices (Expo push tokens) for sending notifications.
+model Device {
+  id         String   @id @default(cuid())
+  token      String   @unique // Expo push token (ExponentPushToken[...])
+  platform   String? // ios | android
+  appVersion String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([platform])
+}
+
 // Server-side event log (also forwarded to the Facebook Conversions API
 // when a CAPI token is configured).
 model Event {

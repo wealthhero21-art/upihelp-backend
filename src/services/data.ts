@@ -30,6 +30,36 @@ export function defaultConfigData() {
       },
     ],
     featureFlags: {} as Record<string, boolean>,
+    // Cross-promoted apps shown on the "More apps" tab (admin-editable).
+    moreApps: [
+      {
+        key: 'kashew',
+        name: 'Kashew',
+        tagline: 'Cashback on EMI',
+        monogram: 'K',
+        color: '#0F8040',
+        android: 'https://play.google.com/store/search?q=Kashew%20cashback%20EMI&c=apps',
+        ios: 'https://apps.apple.com/search?term=Kashew',
+      },
+      {
+        key: 'maximoney',
+        name: 'Maximoney',
+        tagline: 'Lower your EMI',
+        monogram: 'M',
+        color: '#2B4089',
+        android: 'https://play.google.com/store/search?q=Maximoney&c=apps',
+        ios: 'https://apps.apple.com/search?term=Maximoney',
+      },
+      {
+        key: 'insurancesathi',
+        name: 'InsuranceSathi',
+        tagline: 'Your right insurance advisor',
+        monogram: 'IS',
+        color: '#6E4FB3',
+        android: 'https://play.google.com/store/search?q=InsuranceSathi&c=apps',
+        ios: 'https://apps.apple.com/search?term=InsuranceSathi',
+      },
+    ],
     // Forward-looking: the app will become multi-tab; the webview is one tab.
     tabs: [
       {

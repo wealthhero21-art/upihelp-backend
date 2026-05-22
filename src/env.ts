@@ -9,6 +9,13 @@ const schema = z.object({
   ADMIN_API_KEY: z.string().min(1, 'ADMIN_API_KEY is required'),
   // Optional: if set, POST /events requires this in the x-app-key header.
   APP_INGEST_KEY: z.string().optional().default(''),
+  // Admin panel login (hardcoded-style creds; change in env). Comma-separated emails.
+  ADMIN_EMAILS: z.string().optional().default('nevaid@maximoney.in,suraj@maximoney.in'),
+  ADMIN_PASSWORD: z.string().optional().default('Password@123'),
+  // Secret used to sign admin session tokens. Falls back to ADMIN_API_KEY if unset.
+  ADMIN_SESSION_SECRET: z.string().optional().default(''),
+  // Optional: Expo push access token (Expo project setting) for authenticated sends.
+  EXPO_ACCESS_TOKEN: z.string().optional().default(''),
   // Optional: server-side Facebook Conversions API. Dormant until both are set.
   FB_APP_ID: z.string().optional().default(''),
   FB_CAPI_ACCESS_TOKEN: z.string().optional().default(''),
