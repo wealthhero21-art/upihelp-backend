@@ -39,6 +39,15 @@ export function defaultConfigData() {
         url: 'https://www.upihelp.npci.org.in/',
       },
     ],
+    // Admin-configurable trimming of the embedded UPI Help page. Flip
+    // hideHeader/lockToAutopay to false to restore the site's original UI.
+    webview: {
+      url: 'https://www.upihelp.npci.org.in/',
+      hideHeader: true,
+      lockToAutopay: true,
+      hideTexts: ['Txn history', 'UPI Number'],
+      extraHideSelectors: [] as string[],
+    },
   };
 }
 
