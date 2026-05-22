@@ -47,6 +47,7 @@ export function defaultConfigData() {
       hideFooter: true,
       lockToAutopay: true,
       topAlign: true,
+      disableCarousel: true,
       hideTexts: ['Txn history', 'UPI Number'],
       extraHideSelectors: [] as string[],
     },
