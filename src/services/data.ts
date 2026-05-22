@@ -44,7 +44,9 @@ export function defaultConfigData() {
     webview: {
       url: 'https://www.upihelp.npci.org.in/',
       hideHeader: true,
+      hideFooter: true,
       lockToAutopay: true,
+      topAlign: true,
       hideTexts: ['Txn history', 'UPI Number'],
       extraHideSelectors: [] as string[],
     },
