@@ -1,8 +1,11 @@
 # ---- build stage ----
 FROM node:20-alpine AS builder
 WORKDIR /app
+# --include=dev so the build always has typescript/@types/node even when the
+# platform injects NODE_ENV=production into the build environment.
+ENV NODE_ENV=development
 COPY package*.json ./
-RUN npm ci
+RUN npm ci --include=dev
 COPY prisma ./prisma
 COPY tsconfig.json ./
 COPY src ./src
