@@ -30,6 +30,11 @@ export function defaultConfigData() {
       },
     ],
     featureFlags: {} as Record<string, boolean>,
+    // Scrolling helpline ticker under the header (admin-editable).
+    ticker: {
+      enabled: true,
+      text: 'Call 1930 — National Cyber Crime helpline to recover your lost money if money was deducted without your prior consent, approval or intimation.',
+    },
     // Cross-promoted apps shown on the "More apps" tab (admin-editable).
     moreApps: [
       {
